@@ -83,8 +83,8 @@ int cmd_seq(char *args) {
 }
 
 int ja_existe_sequencia (){
-   if (estado.seq == NULL) return 1;
-   else return 0;
+   if (estado.seq == NULL) return 0;
+   else return 1;
 }
 
 
