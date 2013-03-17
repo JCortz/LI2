@@ -11,7 +11,7 @@ int ja_existe_sequencia ();
 
 struct {
   int tamanho;
-	char seq[MAX_SIZE];
+  char seq[MAX_SIZE];
 } estado;
 
 void guarda_sequencia(char *arg) {
@@ -104,5 +104,5 @@ int sequencia_nao_contem_so_As_e_Bs (char *args){
  for (i=0;args[i]!='\0';i++){
      if (args[i]!='A' && args[i]!='B') return 1; 
      }
-   return 0;
+ return 0;
 }
