@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "erro.h"
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_SIZE 1024
 
@@ -14,13 +15,70 @@ struct {
   char seq[MAX_SIZE];
 } estado;
 
+struct {
+  int tamanho;
+  char coords[MAX_SIZE];
+} estado_coord;
+
+struct {
+  int x;
+  int y;
+} coord;
+
+
+
+int ja_existem_coords () {
+   if (estado_coord.tamanho == -1) return 0;
+   else return 1;
+}
+
+char *obtem_coordenadas(){
+   return estado_coord.coords;
+}
+
+int tamanho_das_coords_incorrecto (char *args){
+   if (strlen(args) != ((estado.tamanho)*2)+ strlen(args)) return 0;
+   else return 1;
+}
+
+int nao_ha_so_numeros (char *args){
+   int i;
+   for (i=0;args[i]!='\0';i++){
+     if (!(isdigit(args[i]) || isspace(args[i]))) return 1; 
+     }
+   return 0;
+}
+
+void guarda_coords (char *args){
+   strcpy (estado_coord.coords, args);
+   estado_coord.tamanho = strlen (args);
+}
+
+
+int cmd_coords(char *args) {
+   if (args == NULL){
+       if (ja_existem_coords(args)){
+             printf ("%s\n", obtem_coordenadas());
+             return 1;
+             }
+       else return mensagem_de_erro(E_NAO_COLOC);
+       }
+   else{
+       if (tamanho_das_coords_incorrecto(args))
+          return mensagem_de_erro(E_COORDS);
+       else if (nao_ha_so_numeros(args))
+          return mensagem_de_erro(E_COORDS);
+       else guarda_coords(args);
+   }
+}
+
 void guarda_sequencia(char *arg) {
-	strcpy(estado.seq, arg);
-	estado.tamanho = strlen(arg);
+strcpy(estado.seq, arg);
+estado.tamanho = strlen(arg);
 }
 
 char *obtem_sequencia() {
-	return estado.seq;
+return estado.seq;
 }
 
 int interpretar(char *linha) {
@@ -35,6 +93,10 @@ int interpretar(char *linha) {
     /* Comando seq sem argumentos */
     else if(strcmp(comando, "seq") == 0 && nargs == 1)
         return cmd_seq(NULL);
+    if(strcmp(comando, "coords") == 0 && nargs == 2)
+        return cmd_coords(args);
+   else if(strcmp(comando, "coords") == 0 && nargs == 1)
+        return cmd_coords(NULL);
     /* Comando sair */
     else if(strcmp(comando, "sair") == 0) {
         return 0;
@@ -57,7 +119,8 @@ void interpretador() {
 }
 
 int main() {
-	estado.tamanho = -1;
+estado.tamanho = -1;
+estado_coord.tamanho = -1;
 
     interpretador();
     return 0;
@@ -83,8 +146,8 @@ int cmd_seq(char *args) {
 }
 
 int ja_existe_sequencia (){
-   if (estado.seq == NULL) return 1;
-   else return 0;
+   if (estado.tamanho == -1) return 0;
+   else return 1;
 }
 
 
@@ -102,7 +165,7 @@ int nao_tem_so_um_argumento (char *args){
 int sequencia_nao_contem_so_As_e_Bs (char *args){
  int i;
  for (i=0;args[i]!='\0';i++){
-     if (args[i]!='A' && args[i]!='B') return 1; 
+     if (args[i]!='A' && args[i]!='B') return 1;
      }
  return 0;
 }
