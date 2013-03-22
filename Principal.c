@@ -37,14 +37,14 @@ char *obtem_coordenadas(){
 }
 
 int tamanho_das_coords_incorrecto (char *args){
-   if (strlen(args) != ((estado.tamanho)*2)+ strlen(args)) return 0;
-   else return 1;
+   if (strlen(args) != (estado.tamanho*2+ estado.tamanho*2-1)) return 1;
+   else return 0;
 }
 
 int nao_ha_so_numeros (char *args){
    int i;
    for (i=0;args[i]!='\0';i++){
-     if (!(isdigit(args[i]) || isspace(args[i]))) return 1; 
+     if (!(isdigit(args[i]) || isspace(args[i]))) return 1;
      }
    return 0;
 }
